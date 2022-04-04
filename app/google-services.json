@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "472670815701",
+    "project_id": "fridge2-21d45",
+    "storage_bucket": "fridge2-21d45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472670815701:android:42a186463bac16e2e4a95c",
+        "android_client_info": {
+          "package_name": "com.example.fridge2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472670815701-795j1pvsv4cl5au9q11hm68eipf4fl5c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fridge2",
+            "certificate_hash": "dd6eaae9e7140c8c1d7b75968589982c983cca0a"
+          }
+        },
+        {
+          "client_id": "472670815701-rmegtqj675imokogplp0h38i8u5olate.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-K_6FkuFZOF0W8oUw84JomS0Dc7Ln1wk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472670815701-rmegtqj675imokogplp0h38i8u5olate.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".LoginActivity">
+
+    <RelativeLayout
+        android:id="@+id/centerLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/centerLine"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="150dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanoom"
+            android:gravity="center"
+            android:text="냉장고에 뭐가있니"
+            android:textAllCaps="false"
+            android:textColor="#A6C1EE"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_above="@id/centerLine"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/centerLine"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:hint="이메일">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/centerLine"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:hint="비밀번호"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/gotoForgotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password"
+        android:gravity="right"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="30dp"
+        android:text="비밀번호 찾기"
+        android:textColor="#808080"
+        android:layout_centerVertical="true"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/password"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/button_background"
+        android:fontFamily="@font/nanoom"
+        android:text="로그인"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@+id/login"
+        android:text="or"
+        android:textSize="15dp"
+        android:layout_marginBottom="10dp"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleLogin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@+id/or"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true">
+    </com.google.android.gms.common.SignInButton>
+
+    <ImageButton
+        android:id="@+id/kakaologin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:src="@drawable/kakao_login_medium_wide"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:layout_below="@+id/googleLogin"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="16dp"
+        />
+
+    <TextView
+        android:id="@+id/gotoSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/kakaologin"
+        android:text="아직 회원이 아니신가요?회원가입"
+        android:textColor="#808080"
+        android:gravity="center"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>
