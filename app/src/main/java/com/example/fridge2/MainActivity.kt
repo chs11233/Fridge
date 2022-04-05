@@ -1,5 +1,6 @@
 package com.example.fridge2
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -8,6 +9,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.fridge2.databinding.ActivityMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -17,6 +21,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var mBinding: ActivityMainBinding? = null
     private val binding get() = mBinding!!
     private var auth: FirebaseAuth? = null
+    private var googleSignInClient: GoogleSignInClient? = null
 
     lateinit var navigationView: NavigationView
     lateinit var drawerLayout: DrawerLayout
@@ -30,11 +35,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // 툴바 생성
         val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
-        supportActionBar?.setTitle("냉장고에 뭐가있니") // 툴바 제목 설정
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.navi_menu) // 홈버튼 이미지 변경
-        supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
-
+        supportActionBar?.setDisplayShowTitleEnabled(true) // 툴바에 타이틀 보이게
+        supportActionBar?.title = "냉장고에 뭐가있니"
 
         //NavigationDrawer 생성
         drawerLayout = binding.drawerLayout
@@ -43,9 +47,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView = binding.navView
         navigationView.setNavigationItemSelectedListener(this) //navigation 리스너
 
-
-        // OnNavigationItemSelectedListener를 통해 탭 아이템 선택 시 이벤트를 처리
-        // navi_menu.xml 에서 설정했던 각 아이템들의 id를 통해 알맞은 프래그먼트로 변경하게 한다.
         binding.bnvMain.run {
             setOnItemSelectedListener {
                 when (it.itemId) {
@@ -70,12 +71,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             selectedItemId = R.id.main
         }
+
+        // 로그아웃
+        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
+    //NavigationView
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when(item!!.itemId){
-            android.R.id.home->{
+        when (item.itemId) {
+            android.R.id.home -> {
                 drawerLayout.openDrawer(GravityCompat.START)
             }
         }
@@ -83,14 +92,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.logout-> Toast.makeText(this,"logout 실행", Toast.LENGTH_SHORT).show()
+        when (item.itemId) {
+            R.id.logout -> {
+                var logoutIntent = Intent(this, LoginActivity::class.java)
+                logoutIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(logoutIntent)
+
+                auth?.signOut()
+                FirebaseAuth.getInstance().signOut()
+                googleSignInClient?.signOut()
+            }
         }
         return false
     }
 
+
     override fun onBackPressed() {
-        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawers()
         } else {
             super.onBackPressed()

@@ -89,7 +89,6 @@
                     android:text="닉네임"
                     android:textStyle="bold"/>
 
-
                 <EditText
                     android:id="@+id/nET"
                     android:layout_width="match_parent"
