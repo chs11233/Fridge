@@ -1,4 +1,4 @@
-package com.example.fridge2
+package com.example.fridge2.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

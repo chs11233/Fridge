@@ -1,13 +1,17 @@
-package com.example.fridge2
+package com.example.fridge2.Activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.example.fridge2.Fragment.MainFragment
+import com.example.fridge2.R
+import com.example.fridge2.Fragment.UserFragment
 import com.example.fridge2.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,6 +29,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     lateinit var navigationView: NavigationView
     lateinit var drawerLayout: DrawerLayout
+
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //NavigationDrawer 화면의 이벤트 처리 생성
         navigationView = binding.navView
         navigationView.setNavigationItemSelectedListener(this) //navigation 리스너
+
+        //Fragment간 이동
+        navController = findNavController(R.id.nav_host_fragment)
 
         binding.bnvMain.run {
             setOnItemSelectedListener {

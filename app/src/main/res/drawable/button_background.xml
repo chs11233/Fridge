@@ -5,10 +5,10 @@
         android:startColor="#FF9A9E"
         android:endColor="#FAD0C4"/>
     <corners
-        android:bottomLeftRadius="30dp"
-        android:bottomRightRadius="30dp"
-        android:topLeftRadius="30dp"
-        android:topRightRadius="30dp"/>
+        android:bottomLeftRadius="10dp"
+        android:bottomRightRadius="10dp"
+        android:topLeftRadius="10dp"
+        android:topRightRadius="10dp"/>
     <padding
         android:left="0dip"
         android:top="0dip"
