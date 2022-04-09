@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this) //navigation 리스너
 
         //Fragment간 이동
-        navController = findNavController(R.id.nav_host_fragment)
+        //이게 오류뜸
+        // navController = findNavController(R.id.nav_host_fragment)
 
         binding.bnvMain.run {
             setOnItemSelectedListener {
@@ -104,7 +105,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.logout -> {
                 var logoutIntent = Intent(this, LoginActivity::class.java)
-                logoutIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                logoutIntent.flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(logoutIntent)
 
                 auth?.signOut()
