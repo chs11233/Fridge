@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import com.example.fridge2.Fragment.MainFragment
 import com.example.fridge2.R
 import com.example.fridge2.Fragment.UserFragment

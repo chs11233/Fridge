@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Activity.EditActivity"></activity>
+        <activity android:name=".Activity.CameraActivity" />
+        <activity android:name=".Activity.SilonActivity" />
+        <activity android:name=".Activity.DongActivity" />
         <activity android:name=".Activity.JangActivity" />
         <activity android:name=".Activity.MainActivity" />
         <activity android:name=".Activity.PasswordActivity" />
