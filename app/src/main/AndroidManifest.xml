@@ -12,9 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JangActivity"></activity>
-        <activity android:name=".DongActivity" />
-        <activity android:name=".SilonActivity" />
+        <activity android:name=".Activity.JangActivity" />
         <activity android:name=".Activity.MainActivity" />
         <activity android:name=".Activity.PasswordActivity" />
         <activity android:name=".Activity.SignUpActivity" />

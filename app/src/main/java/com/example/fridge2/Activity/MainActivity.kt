@@ -30,8 +30,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var navigationView: NavigationView
     lateinit var drawerLayout: DrawerLayout
 
-    lateinit var navController: NavController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -52,10 +50,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //NavigationDrawer 화면의 이벤트 처리 생성
         navigationView = binding.navView
         navigationView.setNavigationItemSelectedListener(this) //navigation 리스너
-
-        //Fragment간 이동
-        //이게 오류뜸
-        // navController = findNavController(R.id.nav_host_fragment)
 
         binding.bnvMain.run {
             setOnItemSelectedListener {
