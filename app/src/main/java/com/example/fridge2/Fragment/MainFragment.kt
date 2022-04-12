@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.fridge2.Activity.CameraActivity
-import com.example.fridge2.Activity.EditActivity
+import com.example.fridge2.Activity.AddActivity
 import com.example.fridge2.Activity.JangActivity
 import com.example.fridge2.databinding.FragmentMainBinding
 
@@ -66,9 +66,9 @@ class MainFragment : Fragment() {
             }
         }
 
-        binding.fabEdit.setOnClickListener {
+        binding.fabAdd.setOnClickListener {
             activity?.let {
-                val intent = Intent(context, EditActivity::class.java)
+                val intent = Intent(context, AddActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -77,11 +77,11 @@ class MainFragment : Fragment() {
     private fun toggleFab() {
         if (isFabOpen) {
             ObjectAnimator.ofFloat(binding.fabCamera, "translationY", 0f).apply { start() }
-            ObjectAnimator.ofFloat(binding.fabEdit, "translationY", 0f).apply { start() }
+            ObjectAnimator.ofFloat(binding.fabAdd, "translationY", 0f).apply { start() }
             ObjectAnimator.ofFloat(binding.fabMain, View.ROTATION, 45f, 0f).apply { start() }
         } else { // 플로팅 액션 버튼 열기 - 닫혀있는 플로팅 버튼 꺼내는 애니메이션
             ObjectAnimator.ofFloat(binding.fabCamera, "translationY", -360f).apply { start() }
-            ObjectAnimator.ofFloat(binding.fabEdit, "translationY", -180f).apply { start() }
+            ObjectAnimator.ofFloat(binding.fabAdd, "translationY", -180f).apply { start() }
             ObjectAnimator.ofFloat(binding.fabMain, View.ROTATION, 0f, 45f).apply { start() }
         }
 
