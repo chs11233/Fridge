@@ -36,10 +36,12 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // 구글 로그인
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(
-            R.string.default_web_client_id
-        )).requestEmail().build()
-        googleSignInClient = GoogleSignIn.getClient(this,gso)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(
+            getString(
+                R.string.default_web_client_id
+            )
+        ).requestEmail().build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
         binding.googleLogin.setOnClickListener {
             signIn()
         }
@@ -60,23 +62,25 @@ class LoginActivity : AppCompatActivity() {
         startForResult.launch(signInIntent)
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == RESULT_OK) {
-            val intent: Intent = result.data!!
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d(ContentValues.TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Log.d(ContentValues.TAG, "Google sign in failed", e)
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                val intent: Intent = result.data!!
+                val task: Task<GoogleSignInAccount> =
+                    GoogleSignIn.getSignedInAccountFromIntent(intent)
+                try {
+                    val account = task.getResult(ApiException::class.java)!!
+                    Log.d(ContentValues.TAG, "firebaseAuthWithGoogle:" + account.id)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    Log.d(ContentValues.TAG, "Google sign in failed", e)
+                }
             }
         }
-    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth?.signInWithCredential(credential)?.addOnCompleteListener(this) {task ->
+        auth?.signInWithCredential(credential)?.addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "로그인 성공")
                 auth!!.currentUser
@@ -98,16 +102,18 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         moveMainPage(auth?.currentUser)
     }
+
     // 로그인
     private fun login(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth?.signInWithEmailAndPassword(email, password)?.addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(baseContext,"로그인 되었습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                     moveMainPage(auth?.currentUser)
                 } else {
                     if (task.exception != null)
-                        Toast.makeText(baseContext, task.exception.toString(),Toast.LENGTH_SHORT).show()
+                        Toast.makeText(baseContext, task.exception.toString(), Toast.LENGTH_SHORT)
+                            .show()
                 }
             }
         } else {
@@ -117,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
 
     // 유저정보 넘겨주고 메인 액티비티 호출
     private fun moveMainPage(user: FirebaseUser?) {
-        if(user!= null) {
+        if (user != null) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

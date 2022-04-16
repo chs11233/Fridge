@@ -28,7 +28,7 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.pCB.setOnClickListener {
             if (binding.pET.length() > 0 && binding.pCET.length() > 0) {
-                if(binding.pET.length() > 5 && binding.pCET.length() > 5) {
+                if (binding.pET.length() > 5 && binding.pCET.length() > 5) {
                     if (binding.pET.text.toString() == binding.pCET.text.toString()) {
                         Toast.makeText(this, "비밀번호 일치", Toast.LENGTH_LONG).show()
                     } else {
@@ -48,8 +48,9 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp(email: String, password: String) {
-        if(binding.eET.text.toString().isNotBlank() && binding.pET.text.toString().isNotBlank() &&
-                binding.pCET.text.toString().isNotBlank() && binding.nET.text.toString().isNotBlank()) {
+        if (binding.eET.text.toString().isNotBlank() && binding.pET.text.toString().isNotBlank() &&
+            binding.pCET.text.toString().isNotBlank() && binding.nET.text.toString().isNotBlank()
+        ) {
             mAuth = FirebaseAuth.getInstance()
             mAuth?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(this, OnCompleteListener<AuthResult?> { task ->
