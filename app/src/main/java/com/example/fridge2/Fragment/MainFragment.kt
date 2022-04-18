@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.fridge2.Activity.CameraActivity
-import com.example.fridge2.Activity.AddActivity
-import com.example.fridge2.Activity.JangActivity
+import com.example.fridge2.Activity.*
 import com.example.fridge2.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -39,13 +37,13 @@ class MainFragment : Fragment() {
         }
         binding.nd.setOnClickListener {
             activity?.let {
-                val intent = Intent(context, JangActivity::class.java)
+                val intent = Intent(context, DongActivity::class.java)
                 startActivity(intent)
             }
         }
         binding.so.setOnClickListener {
             activity?.let {
-                val intent = Intent(context, JangActivity::class.java)
+                val intent = Intent(context, SilonActivity::class.java)
                 startActivity(intent)
             }
         }
