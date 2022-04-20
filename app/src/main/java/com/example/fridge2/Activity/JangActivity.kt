@@ -2,48 +2,67 @@ package com.example.fridge2.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fridge2.Adapter.RecyclerViewAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.fridge2.FoodInfo
 import com.example.fridge2.databinding.ActivityJangBinding
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
+import com.example.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
     private val binding get() = mBinding!!
 
     var firestore: FirebaseFirestore? = null
-    val mDatas = mutableListOf<FoodInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityJangBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val foods = mutableListOf<String>()
+
         firestore = FirebaseFirestore.getInstance()
 
-        val Firestore: FirebaseFirestore = Firebase.firestore
-        val foodsRef = Firestore.collection("/foods")
-        val query: Query = foodsRef.whereEqualTo("loc", 1)
-        val task: Task<QuerySnapshot> = query.get()
+        binding.rvProfile.layoutManager = LinearLayoutManager(this)
+        binding.rvProfile.adapter = RecyclerViewAdapter(foods)
 
-        task.addOnSuccessListener { querySnapshot ->
-            val documents: MutableList<DocumentSnapshot> = querySnapshot.documents
-            for (document in documents) {
-                // 성공했을 때
-                firestore!!.collection("foods").get().addOnSuccessListener { result ->
-                    binding.rvProfile.adapter = RecyclerViewAdapter()
-                    binding.rvProfile.layoutManager = LinearLayoutManager(this)
+    }
+
+    inner class RecyclerViewAdapter(val binding: MutableList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var foods : ArrayList<FoodInfo> = arrayListOf()
+
+        init {
+            firestore?.collection("foods")?.orderBy("loc")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                foods.clear()
+                for (snapshot in querySnapshot!!.documents) {
+                    var item = snapshot.toObject(FoodInfo::class.java)
+                    foods.add(item!!)
                 }
+                notifyDataSetChanged()
             }
-        }.addOnFailureListener {
-            // 실패했을때
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            val binding = ItemFoodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return CustomViewHolder(binding)
+        }
+
+        inner class CustomViewHolder(val binding: ItemFoodBinding) : RecyclerView.ViewHolder(binding.root)
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            var viewHolder = (holder as CustomViewHolder).binding
+
+            viewHolder.foodname.text = foods[position].name
+            viewHolder.foodloc.text = foods[position].loc.toString()
+            viewHolder.foodDday.text = foods[position].date_long.toString()
+            viewHolder.foodDate.text = foods[position].date
+        }
+
+        override fun getItemCount(): Int {
+            return foods.size
         }
 
     }

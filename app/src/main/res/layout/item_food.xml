@@ -16,7 +16,7 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
-        android:id="@+id/textName"
+        android:id="@+id/foodname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -28,27 +28,27 @@
         app:layout_constraintTop_toTopOf="@id/PhotoImg" />
 
     <TextView
-        android:id="@+id/textLoc"
+        android:id="@+id/foodloc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="age"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/PhotoImg"
-        app:layout_constraintStart_toStartOf="@id/textName" />
-
+        app:layout_constraintStart_toStartOf="@id/foodname" />
 
     <TextView
-        android:id="@+id/textDday"
+        android:id="@+id/foodDday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
+        android:scaleType="centerInside"
         android:text="D - DAY"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@id/textName"
-        app:layout_constraintStart_toStartOf="@id/textName" />
+        app:layout_constraintBottom_toBottomOf="@id/foodname"
+        app:layout_constraintStart_toStartOf="@id/PhotoImg" />
 
     <TextView
-        android:id="@+id/textDate"
+        android:id="@+id/foodDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
@@ -56,7 +56,7 @@
         android:text="2020.12.31"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/PhotoImg"
-        app:layout_constraintStart_toStartOf="@id/textName" />
+        app:layout_constraintStart_toStartOf="@id/PhotoImg" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

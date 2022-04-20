@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="냉장" />
+                android:text="냉동" />
 
             <CheckBox
                 android:id="@+id/fridgeCheckBox"
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="냉동" />
+                android:text="냉장" />
 
             <CheckBox
                 android:id="@+id/roomCheckBox"

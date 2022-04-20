@@ -91,9 +91,16 @@ class AddActivity : AppCompatActivity() {
                 val df = SimpleDateFormat("yyyy.MM.dd")
                 calendar.time =
                     df.parse(binding.dateView.text.toString())!!    // dateView에 작성되어있는 string을 이용
-                var date_long = calendar.timeInMillis
+                val today = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.time.time
+                var date_long = (calendar.time.time - today) / (1000 * 60 * 60 * 24)
 
                 /*****************************************************/
+
                 var food = FoodInfo(name, date, date_long, loc, false)
 
                 saveFood(food)
