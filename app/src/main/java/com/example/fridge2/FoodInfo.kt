@@ -7,4 +7,4 @@ data class FoodInfo(
     var loc: Int? = null,
     var check: Boolean? = null
 
-    )
+)

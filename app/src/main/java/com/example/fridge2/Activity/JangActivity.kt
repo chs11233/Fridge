@@ -31,32 +31,35 @@ class JangActivity : AppCompatActivity() {
 
     }
 
-    inner class RecyclerViewAdapter(val binding: MutableList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var foods : ArrayList<FoodInfo> = arrayListOf()
+    inner class RecyclerViewAdapter(val binding: MutableList<String>) :
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var foods: ArrayList<FoodInfo> = arrayListOf()
 
         init {
-            firestore?.collection("foods")?.orderBy("loc")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                foods.clear()
-                for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(FoodInfo::class.java)
-                    foods.add(item!!)
+            firestore?.collection("foods")?.whereEqualTo("loc", 1)
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    foods.clear()
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(FoodInfo::class.java)
+                        foods.add(item!!)
+                    }
+                    notifyDataSetChanged()
                 }
-                notifyDataSetChanged()
-            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val binding = ItemFoodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                ItemFoodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return CustomViewHolder(binding)
         }
 
-        inner class CustomViewHolder(val binding: ItemFoodBinding) : RecyclerView.ViewHolder(binding.root)
+        inner class CustomViewHolder(val binding: ItemFoodBinding) :
+            RecyclerView.ViewHolder(binding.root)
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
 
             viewHolder.foodname.text = foods[position].name
-            viewHolder.foodloc.text = foods[position].loc.toString()
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
         }

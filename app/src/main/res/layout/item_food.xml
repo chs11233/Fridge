@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:orientation="vertical">
@@ -15,26 +16,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
-    <TextView
-        android:id="@+id/foodname"
+    <LinearLayout
+        android:id="@+id/layname"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:text="Breed"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_height="match_parent"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/PhotoImg"
-        app:layout_constraintTop_toTopOf="@id/PhotoImg" />
+        app:layout_constraintTop_toTopOf="@id/PhotoImg"
+        tools:ignore="MissingConstraints">
 
-    <TextView
-        android:id="@+id/foodloc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="age"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/PhotoImg"
-        app:layout_constraintStart_toStartOf="@id/foodname" />
+        <TextView
+            android:id="@+id/foodname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Breed"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/foodDday"
@@ -44,8 +43,8 @@
         android:scaleType="centerInside"
         android:text="D - DAY"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@id/foodname"
-        app:layout_constraintStart_toStartOf="@id/PhotoImg" />
+        app:layout_constraintStart_toStartOf="@id/layname"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/foodDate"
@@ -56,7 +55,7 @@
         android:text="2020.12.31"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/PhotoImg"
-        app:layout_constraintStart_toStartOf="@id/PhotoImg" />
+        app:layout_constraintStart_toStartOf="@id/layname" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
