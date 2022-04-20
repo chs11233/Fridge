@@ -7,14 +7,12 @@
     tools:context=".Activity.JangActivity">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rv_profile"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/item_food"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,10 @@
 package com.example.fridge2
 
 data class FoodInfo(
-    var name: String?,
-    var date: String?,
-    var date_long: Long,
-    var loc: Int?,
-    var check: Boolean
+    var name: String? = null,
+    var date: String? = null,
+    var date_long: Long? = null,
+    var loc: Int? = null,
+    var check: Boolean? = null
 
     )
