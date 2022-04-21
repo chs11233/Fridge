@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fridge2.FoodInfo
+import com.example.fridge2.R
 import com.example.fridge2.databinding.ActivityJangBinding
 import com.example.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,8 +27,8 @@ class JangActivity : AppCompatActivity() {
 
         firestore = FirebaseFirestore.getInstance()
 
-        binding.rvProfile.layoutManager = LinearLayoutManager(this)
-        binding.rvProfile.adapter = RecyclerViewAdapter(foods)
+        binding.rvJang.layoutManager = LinearLayoutManager(this)
+        binding.rvJang.adapter = RecyclerViewAdapter(foods)
 
     }
 
