@@ -1,6 +1,7 @@
 package com.example.fridge2.Activity
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,6 +21,8 @@ class JangActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
 
+    val ONE_DAY = (24 * 60 * 60 * 1000)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,7 @@ class JangActivity : AppCompatActivity() {
         val foods = mutableListOf<String>()
 
         firestore = FirebaseFirestore.getInstance()
+
 
         binding.rvJang.layoutManager = LinearLayoutManager(this)
         binding.rvJang.adapter = RecyclerViewAdapter(foods)
@@ -47,6 +51,7 @@ class JangActivity : AppCompatActivity() {
                     for (snapshot in querySnapshot!!.documents) {
                         var item = snapshot.toObject(FoodInfo::class.java)
                         foods.add(item!!)
+
                     }
                     notifyDataSetChanged()
                 }
@@ -86,7 +91,6 @@ class JangActivity : AppCompatActivity() {
             set(Calendar.MILLISECOND, 0)
         }.timeInMillis
     }
-
 
     fun refresh() {
         val refreshIntent = getIntent()

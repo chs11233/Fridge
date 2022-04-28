@@ -98,7 +98,7 @@ class AddActivity : AppCompatActivity() {
                     set(Calendar.SECOND, 0)
                     set(Calendar.MILLISECOND, 0)
                 }.time.time
-                var date_long = (calendar.time.time - today) / (1000 * 60 * 60 * 24)
+                var date_long = (calendar.time.time - today) / ONE_DAY
 
                 /*****************************************************/
 
