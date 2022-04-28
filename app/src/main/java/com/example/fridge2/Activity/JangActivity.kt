@@ -1,5 +1,6 @@
 package com.example.fridge2.Activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +11,15 @@ import com.example.fridge2.FoodInfo
 import com.example.fridge2.databinding.ActivityJangBinding
 import com.example.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
+import kotlin.collections.ArrayList
 
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
     private val binding get() = mBinding!!
 
     var firestore: FirebaseFirestore? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +33,7 @@ class JangActivity : AppCompatActivity() {
         binding.rvJang.layoutManager = LinearLayoutManager(this)
         binding.rvJang.adapter = RecyclerViewAdapter(foods)
 
+
     }
 
     inner class RecyclerViewAdapter(val binding: MutableList<String>) :
@@ -37,7 +42,7 @@ class JangActivity : AppCompatActivity() {
 
         init {
             firestore?.collection("foods")?.whereEqualTo("loc", 1)
-                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                ?.addSnapshotListener { querySnapshot, _ ->
                     foods.clear()
                     for (snapshot in querySnapshot!!.documents) {
                         var item = snapshot.toObject(FoodInfo::class.java)
@@ -62,6 +67,7 @@ class JangActivity : AppCompatActivity() {
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
+
         }
 
         override fun getItemCount(): Int {
@@ -69,5 +75,30 @@ class JangActivity : AppCompatActivity() {
         }
 
     }
+
+    fun getIgnoredTimeDays(time: Long): Long {
+        return Calendar.getInstance().apply {
+            timeInMillis = time
+
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+    }
+
+
+    fun refresh() {
+        val refreshIntent = getIntent()
+        refreshIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        finish()
+        startActivity(refreshIntent)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        refresh()
+    }
+
 
 }

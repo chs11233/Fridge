@@ -2,6 +2,7 @@ package com.example.fridge2.Activity
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -127,5 +128,6 @@ class AddActivity : AppCompatActivity() {
             }
         }
     }
+
 
 }
