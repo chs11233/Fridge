@@ -2,14 +2,12 @@ package com.example.fridge2.Activity
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.fridge2.FoodInfo
 import com.example.fridge2.databinding.ActivityAddBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,8 +22,6 @@ class AddActivity : AppCompatActivity() {
     private val binding get() = mBinding!!
 
     val ONE_DAY = (24 * 60 * 60 * 1000)
-
-    private val foodCollectionRef = Firebase.firestore.collection("foods")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +114,9 @@ class AddActivity : AppCompatActivity() {
     private fun saveFood(food: FoodInfo) = CoroutineScope(Dispatchers.IO).launch {
         //withContext는 다른 스레드로 포커스를 전환하는 메서드입니다!
         try {
-            foodCollectionRef.add(food).await() // await는 데이터가 성공적으로 업로드가 될 때 까지 기다려주는 메서드입니다.
+            var foodCollectionRef = FirebaseFirestore.getInstance()
+            foodCollectionRef.collection("foods")
+                .add(food).await() // await는 데이터가 성공적으로 업로드가 될 때 까지 기다려주는 메서드입니다.
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@AddActivity, "저장되었습니다.", Toast.LENGTH_LONG).show()
             }

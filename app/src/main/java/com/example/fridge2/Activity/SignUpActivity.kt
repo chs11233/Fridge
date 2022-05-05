@@ -11,13 +11,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class SignUpActivity : AppCompatActivity() {
     private var mBinding: ActivitySignUpBinding? = null
     private val binding get() = mBinding!!
 
     private var mAuth: FirebaseAuth? = null
-    private var user: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,7 @@ class SignUpActivity : AppCompatActivity() {
         binding.sUB.setOnClickListener {
             signUp(binding.eET.text.toString(), binding.nET.text.toString())
         }
+
     }
 
     private fun signUp(email: String, password: String) {
@@ -53,7 +57,7 @@ class SignUpActivity : AppCompatActivity() {
         ) {
             mAuth = FirebaseAuth.getInstance()
             mAuth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this, OnCompleteListener<AuthResult?> { task ->
+                ?.addOnCompleteListener(this, OnCompleteListener<AuthResult?>  { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "회원가입이 되었습니다.", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, MainActivity::class.java))
@@ -63,4 +67,5 @@ class SignUpActivity : AppCompatActivity() {
                 })
         }
     }
+
 }
