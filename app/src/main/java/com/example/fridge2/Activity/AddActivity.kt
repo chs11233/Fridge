@@ -1,14 +1,19 @@
 package com.example.fridge2.Activity
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fridge2.FoodInfo
+import com.example.fridge2.R
 import com.example.fridge2.databinding.ActivityAddBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,35 +22,26 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AddActivity : AppCompatActivity() {
     private var mBinding: ActivityAddBinding? = null
     private val binding get() = mBinding!!
 
     val ONE_DAY = (24 * 60 * 60 * 1000)
+    var uriString = "android.resource://com.example.fridge2/drawable/google"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 달력 버튼 눌렀을 때 (DatePicker로 달력 표시)
-        binding.dateBtn.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            var year = calendar.get(Calendar.YEAR)
-            var month = calendar.get(Calendar.MONTH)
-            var day = calendar.get(Calendar.DAY_OF_MONTH)
+        binding.cIV.setOnClickListener {
+            CropImage.activity()
+                .setAspectRatio(1, 1)
+                .start(this)
+        }
 
-            var date_listener =
-                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                    binding.dateView.text = "${year}.%02d.%02d".format(month + 1, dayOfMonth)
-                }
-            // DatePickerDialog 뒤에 .apply{} 부분은 현재 시간을 기준으로 그것보다 minDate는 선택할 수 없게 비활성화 하는 기능
-            // System.currentTimeMillis는 1/1000초 단위로 현재시간이 long Type으로 반환된다. 때문에 뒤에 ONE_DAY(= 24 * 60 * 60 * 1000) * N 을 더해줘 N일 뒤부터 날짜 선택이 가능하도록 한다.
-            var picker = DatePickerDialog(this, date_listener, year, month, day).apply {
-                datePicker.minDate = System.currentTimeMillis() + ONE_DAY * 1
-            }
-            picker.show()
+        binding.dateBtn.setOnClickListener {
+            datePicker()
         }
 
         binding.freezeCheckBox.setOnClickListener {
@@ -62,65 +58,84 @@ class AddActivity : AppCompatActivity() {
         }
 
         binding.cg.setOnClickListener {
-            if (binding.nameText.text.toString() == "") {
-                Toast.makeText(this, "식재료 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
-            } else if (binding.dateView.text.toString() == "") {
-                Toast.makeText(this, "유통기한을 입력해주세요.", Toast.LENGTH_SHORT).show()
-            } else if (!binding.freezeCheckBox.isChecked && !binding.fridgeCheckBox.isChecked && !binding.roomCheckBox.isChecked) {
-                Toast.makeText(this, "보관장소를 선택해주세요.", Toast.LENGTH_SHORT).show()
-            } else {
-                var name = binding.nameText.text.toString()
-                var date = binding.dateView.text.toString()
-                var loc = 3
-                when {
-                    binding.freezeCheckBox.isChecked -> {
-                        loc = 0
-                    }
-                    binding.fridgeCheckBox.isChecked -> {
-                        loc = 1
-                    }
-                    binding.roomCheckBox.isChecked -> {
-                        loc = 2
-                    }
-                }
-                /****************** D - day 계산용 *********************/
-                // D-day 계산용 Long Type의 날짜를 저장
-                var calendar = Calendar.getInstance()
-                val df = SimpleDateFormat("yyyy.MM.dd")
-                calendar.time =
-                    df.parse(binding.dateView.text.toString())!!    // dateView에 작성되어있는 string을 이용
-                val today = Calendar.getInstance().apply {
-                    set(Calendar.HOUR_OF_DAY, 0)
-                    set(Calendar.MINUTE, 0)
-                    set(Calendar.SECOND, 0)
-                    set(Calendar.MILLISECOND, 0)
-                }.time.time
-                var date_long = (calendar.time.time - today) / ONE_DAY
-
-                /*****************************************************/
-
-                var food = FoodInfo(name, date, date_long, loc, false)
-
-                saveFood(food)
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-
-            }
+            save()
         }
+    }
 
+    private fun datePicker() {
+        val calendar = Calendar.getInstance()
+        var year = calendar.get(Calendar.YEAR)
+        var month = calendar.get(Calendar.MONTH)
+        var day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        var date_listener =
+            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                binding.dateView.text = "${year}.%02d.%02d".format(month + 1, dayOfMonth)
+            }
+        // .apply{} = 현재시간보다 앞으로 못하게 적어줌
+        var picker = DatePickerDialog(this, date_listener, year, month, day).apply {
+            datePicker.minDate = System.currentTimeMillis() + ONE_DAY * 1
+        }
+        picker.show()
+    }
+
+    private fun save() {
+        if (binding.nameText.text.toString() == "") {
+            Toast.makeText(this, "식재료 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+        } else if (binding.dateView.text.toString() == "") {
+            Toast.makeText(this, "유통기한을 입력해주세요.", Toast.LENGTH_SHORT).show()
+        } else if (!binding.freezeCheckBox.isChecked && !binding.fridgeCheckBox.isChecked && !binding.roomCheckBox.isChecked) {
+            Toast.makeText(this, "보관장소를 선택해주세요.", Toast.LENGTH_SHORT).show()
+        } else {
+            var name = binding.nameText.text.toString()
+            var date = binding.dateView.text.toString()
+            var loc = 3
+            when {
+                binding.freezeCheckBox.isChecked -> {
+                    loc = 0
+                }
+                binding.fridgeCheckBox.isChecked -> {
+                    loc = 1
+                }
+                binding.roomCheckBox.isChecked -> {
+                    loc = 2
+                }
+            }
+            /****************** D - day 계산용 *********************/
+            // D-day 계산용 Long Type의 날짜를 저장
+            var calendar = Calendar.getInstance()
+            val df = SimpleDateFormat("yyyy.MM.dd")
+            calendar.time =
+                df.parse(binding.dateView.text.toString())!!    // dateView에 작성되어있는 string을 이용
+            val today = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.time.time
+            var date_long = (calendar.time.time - today) / ONE_DAY
+
+            /*****************************************************/
+
+            var food = FoodInfo(name, date, date_long, loc, false, uriString)
+
+            saveFood(food)
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
     }
 
     private fun saveFood(food: FoodInfo) = CoroutineScope(Dispatchers.IO).launch {
-        //withContext는 다른 스레드로 포커스를 전환하는 메서드입니다!
+        //withContext는 다른 스레드로 포커스를 전환하는 메서드
         try {
             var firebaseUser = FirebaseAuth.getInstance().currentUser
             var foodCollectionRef = FirebaseFirestore.getInstance()
             if (firebaseUser != null) {
                 foodCollectionRef.collection("user").document(firebaseUser.uid).collection("foods")
                     .add(food).await()
-            } // await는 데이터가 성공적으로 업로드가 될 때 까지 기다려주는 메서드입니다.
+            } // await는 데이터가 성공적으로 업로드가 될 때 까지 기다려주는 메서드
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@AddActivity, "저장되었습니다.", Toast.LENGTH_LONG).show()
             }
@@ -131,5 +146,21 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == Activity.RESULT_OK){
+                val resultUri = result.uri
+                uriString = resultUri.toString()
+
+                binding.cIV.setImageUriAsync(resultUri)
+                binding.cIV.isShowCropOverlay = false
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+            }
+        }
+    }
 
 }

@@ -5,6 +5,6 @@ data class FoodInfo(
     var date: String? = null,
     var date_long: Long? = null,
     var loc: Int? = null,
-    var check: Boolean? = null
-
+    var check: Boolean? = null,
+    var uriString: String? = null
 )
