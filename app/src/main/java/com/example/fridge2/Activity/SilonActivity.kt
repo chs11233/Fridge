@@ -11,6 +11,7 @@ import com.example.fridge2.R
 import com.example.fridge2.databinding.ActivityJangBinding
 import com.example.fridge2.databinding.ActivitySilonBinding
 import com.example.fridge2.databinding.ItemFoodBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SilonActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class SilonActivity : AppCompatActivity() {
     private val binding get() = mBinding!!
 
     var firestore: FirebaseFirestore? = null
+    var firebaseUser = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +39,9 @@ class SilonActivity : AppCompatActivity() {
         var foods: ArrayList<FoodInfo> = arrayListOf()
 
         init {
-            firestore?.collection("foods")?.whereEqualTo("loc", 2)
-                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")
+                ?.whereEqualTo("loc", 2)
+                ?.addSnapshotListener { querySnapshot, _ ->
                     foods.clear()
                     for (snapshot in querySnapshot!!.documents) {
                         var item = snapshot.toObject(FoodInfo::class.java)
