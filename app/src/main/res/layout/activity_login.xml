@@ -28,7 +28,7 @@
             android:layout_above="@id/centerLine"
             android:fontFamily="@font/nanoom"
             android:gravity="center"
-            android:text="냉장고에 뭐가있니"
+            android:text="냉장고에 무엇이 있을까"
             android:textAllCaps="false"
             android:textColor="#A6C1EE"
             android:textSize="30sp"

@@ -5,13 +5,13 @@
     <item
         android:id="@+id/main"
         android:title="냉장고"
-        android:icon="@drawable/fridge"
+        android:icon="@drawable/icon_kitchen"
         app:showAsAction="ifRoom"
         android:enabled="true"/>
     <item
         android:id="@+id/user"
         android:title="마이페이지"
-        android:icon="@drawable/button_person"
+        android:icon="@drawable/icn_person"
         app:showAsAction="ifRoom"
         android:enabled="true"/>
 </menu>

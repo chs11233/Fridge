@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.navi_menu) // 홈버튼 이미지 변경
         supportActionBar?.setDisplayShowTitleEnabled(true) // 툴바에 타이틀 보이게
-        supportActionBar?.title = "냉장고에 뭐가있니"
+        supportActionBar?.title = "냉 무"
 
         //NavigationDrawer 생성
         drawerLayout = binding.drawerLayout
