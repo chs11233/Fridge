@@ -69,6 +69,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1")
 
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
 }

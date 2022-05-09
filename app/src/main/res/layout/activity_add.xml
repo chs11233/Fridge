@@ -41,7 +41,7 @@
             android:layout_marginTop="50dp"
             app:cardCornerRadius="100dp">
 
-            <com.theartofdev.edmodo.cropper.CropImageView
+            <ImageView
                 android:id="@+id/cIV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

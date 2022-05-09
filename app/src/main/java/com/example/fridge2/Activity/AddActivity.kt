@@ -8,12 +8,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fridge2.FoodInfo
-import com.example.fridge2.R
 import com.example.fridge2.databinding.ActivityAddBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.theartofdev.edmodo.cropper.CropImage
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +26,10 @@ class AddActivity : AppCompatActivity() {
     private val binding get() = mBinding!!
 
     val ONE_DAY = (24 * 60 * 60 * 1000)
-    var uriString = "android.resource://com.example.fridge2/drawable/google"
+
+    var curFile: Uri? = null
+    val imageRef = Firebase.storage.reference
+    private val REQUEST_CODE_IMAGE_PICK = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +37,10 @@ class AddActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.cIV.setOnClickListener {
-            CropImage.activity()
-                .setAspectRatio(1, 1)
-                .start(this)
+            Intent(Intent.ACTION_GET_CONTENT).also {
+                it.type = "image/*"
+                startActivityForResult(it, REQUEST_CODE_IMAGE_PICK)
+            }
         }
 
         binding.dateBtn.setOnClickListener {
@@ -59,6 +62,7 @@ class AddActivity : AppCompatActivity() {
 
         binding.cg.setOnClickListener {
             save()
+
         }
     }
 
@@ -117,9 +121,10 @@ class AddActivity : AppCompatActivity() {
 
             /*****************************************************/
 
-            var food = FoodInfo(name, date, date_long, loc, false, uriString)
+            var food = FoodInfo(name, date, date_long, loc, false)
 
             saveFood(food)
+            uploadImageToStorage()
 
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -148,17 +153,26 @@ class AddActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
+            data?.data?.let {
+                curFile = it
+                binding.cIV.setImageURI(it)
+            }
+        }
+    }
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == Activity.RESULT_OK){
-                val resultUri = result.uri
-                uriString = resultUri.toString()
-
-                binding.cIV.setImageUriAsync(resultUri)
-                binding.cIV.isShowCropOverlay = false
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
+    private fun uploadImageToStorage() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            var imgFileName = "IMAGE$timeStamp.png"
+            curFile?.let {
+                imageRef.child("images").child(imgFileName).putFile(it).await()
+                withContext(Dispatchers.Main) {
+                }
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@AddActivity, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
