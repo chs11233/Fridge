@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.fridge2">
+    package="com.holifridge.fridge2">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,15 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.AddActivity"/>
-        <activity android:name=".Activity.CameraActivity" />
-        <activity android:name=".Activity.SilonActivity" />
-        <activity android:name=".Activity.DongActivity" />
-        <activity android:name=".Activity.JangActivity" />
-        <activity android:name=".Activity.MainActivity" />
-        <activity android:name=".Activity.PasswordActivity" />
-        <activity android:name=".Activity.SignUpActivity" />
-        <activity android:name=".Activity.LoginActivity">
+        <activity android:name="com.holifridge.fridge2.Activity.AddActivity"/>
+        <activity android:name="com.holifridge.fridge2.Activity.CameraActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.SilonActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.DongActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.JangActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.MainActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.PasswordActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.SignUpActivity" />
+        <activity android:name="com.holifridge.fridge2.Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
 import android.content.ContentValues
 import android.content.Intent
@@ -8,8 +8,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.example.fridge2.R
-import com.example.fridge2.databinding.ActivityLoginBinding
+import com.holifridge.fridge2.R
+import com.holifridge.fridge2.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

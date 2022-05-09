@@ -1,4 +1,4 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.fridge2.FoodInfo
-import com.example.fridge2.databinding.ActivityAddBinding
+import com.holifridge.fridge2.FoodInfo
+import com.holifridge.fridge2.databinding.ActivityAddBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase

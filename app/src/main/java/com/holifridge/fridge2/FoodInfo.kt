@@ -1,4 +1,4 @@
-package com.example.fridge2
+package com.holifridge.fridge2
 
 data class FoodInfo(
     var name: String? = null,

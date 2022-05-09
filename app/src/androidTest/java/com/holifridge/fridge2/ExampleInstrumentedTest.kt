@@ -1,4 +1,4 @@
-package com.example.fridge2
+package com.holifridge.fridge2
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

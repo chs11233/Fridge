@@ -1,20 +1,15 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.fridge2.databinding.ActivitySignUpBinding
+import com.holifridge.fridge2.databinding.ActivitySignUpBinding
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 class SignUpActivity : AppCompatActivity() {
     private var mBinding: ActivitySignUpBinding? = null

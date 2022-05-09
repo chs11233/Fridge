@@ -1,12 +1,12 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.fridge2.R
+import com.holifridge.fridge2.R
 
-class PasswordActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_password)
+        setContentView(R.layout.activity_camera)
     }
 }

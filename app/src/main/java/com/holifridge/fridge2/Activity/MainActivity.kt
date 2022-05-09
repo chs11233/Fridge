@@ -1,4 +1,4 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.fridge2.Fragment.MainFragment
-import com.example.fridge2.R
-import com.example.fridge2.Fragment.UserFragment
-import com.example.fridge2.databinding.ActivityMainBinding
+import com.holifridge.fridge2.Fragment.MainFragment
+import com.holifridge.fridge2.R
+import com.holifridge.fridge2.Fragment.UserFragment
+import com.holifridge.fridge2.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

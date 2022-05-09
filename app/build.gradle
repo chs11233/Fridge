@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.fridge2"
+        applicationId "com.holifridge.fridge2"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1

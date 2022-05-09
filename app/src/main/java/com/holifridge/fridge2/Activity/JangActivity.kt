@@ -1,4 +1,4 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fridge2.FoodInfo
-import com.example.fridge2.databinding.ActivityJangBinding
-import com.example.fridge2.databinding.ItemFoodBinding
+import com.holifridge.fridge2.FoodInfo
+import com.holifridge.fridge2.databinding.ActivityJangBinding
+import com.holifridge.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.collections.ArrayList
@@ -20,8 +20,6 @@ class JangActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
     var firebaseUser = FirebaseAuth.getInstance().currentUser
-
-    val ONE_DAY = (24 * 60 * 60 * 1000)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +73,6 @@ class JangActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return foods.size
         }
-
     }
 
     private fun reFresh() {

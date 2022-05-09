@@ -1,16 +1,15 @@
-package com.example.fridge2.Activity
+package com.holifridge.fridge2.Activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fridge2.FoodInfo
-import com.example.fridge2.R
-import com.example.fridge2.databinding.ActivityJangBinding
-import com.example.fridge2.databinding.ActivitySilonBinding
-import com.example.fridge2.databinding.ItemFoodBinding
+import com.holifridge.fridge2.FoodInfo
+import com.holifridge.fridge2.databinding.ActivitySilonBinding
+import com.holifridge.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -71,6 +70,17 @@ class SilonActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return foods.size
         }
+    }
 
+    private fun reFresh() {
+        val refreshIntent = intent
+        refreshIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        finish()
+        startActivity(refreshIntent)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        reFresh()
     }
 }
