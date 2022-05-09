@@ -120,8 +120,10 @@ class AddActivity : AppCompatActivity() {
             var date_long = (calendar.time.time - today) / ONE_DAY
 
             /*****************************************************/
+            var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            var url = timeStamp
 
-            var food = FoodInfo(name, date, date_long, loc, false)
+            var food = FoodInfo(name, date, date_long, loc, false, url)
 
             saveFood(food)
             uploadImageToStorage()
@@ -151,16 +153,6 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
-            data?.data?.let {
-                curFile = it
-                binding.cIV.setImageURI(it)
-            }
-        }
-    }
-
     private fun uploadImageToStorage() = CoroutineScope(Dispatchers.IO).launch {
         try {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -173,6 +165,16 @@ class AddActivity : AppCompatActivity() {
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@AddActivity, e.message, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
+            data?.data?.let {
+                curFile = it
+                binding.cIV.setImageURI(it)
             }
         }
     }

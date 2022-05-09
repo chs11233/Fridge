@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/PhotoImg"
+        android:id="@+id/photoImg"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
@@ -21,8 +21,8 @@
         android:layout_width="180dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        app:layout_constraintStart_toEndOf="@id/PhotoImg"
-        app:layout_constraintTop_toTopOf="@id/PhotoImg"
+        app:layout_constraintStart_toEndOf="@id/photoImg"
+        app:layout_constraintTop_toTopOf="@id/photoImg"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -69,7 +69,7 @@
         android:gravity="center"
         android:text="2020.12.31"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/PhotoImg"
+        app:layout_constraintBottom_toBottomOf="@id/photoImg"
         app:layout_constraintStart_toStartOf="@id/layname" />
 
 

@@ -1,18 +1,21 @@
 package com.holifridge.fridge2.Activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.holifridge.fridge2.FoodInfo
 import com.holifridge.fridge2.databinding.ActivityJangBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.collections.ArrayList
+
 
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
@@ -64,9 +67,16 @@ class JangActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
 
+            val firebaseStorage = FirebaseStorage.getInstance()
+            val storageReference = firebaseStorage.reference.child("images")
+            storageReference.downloadUrl.addOnCompleteListener {
+                Glide.with(this@JangActivity).load("IMAGE" + foods[position].url + ".png").into(viewHolder.photoImg)
+            }
+
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
+
 
         }
 
@@ -86,6 +96,4 @@ class JangActivity : AppCompatActivity() {
         super.onRestart()
         reFresh()
     }
-
-
 }
