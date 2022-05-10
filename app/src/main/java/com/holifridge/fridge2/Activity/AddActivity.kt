@@ -121,7 +121,8 @@ class AddActivity : AppCompatActivity() {
 
             /*****************************************************/
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            var url = timeStamp
+            var imgFileName = "IMAGE$timeStamp.jpg"
+            var url = imgFileName
 
             var food = FoodInfo(name, date, date_long, loc, false, url)
 
@@ -156,7 +157,7 @@ class AddActivity : AppCompatActivity() {
     private fun uploadImageToStorage() = CoroutineScope(Dispatchers.IO).launch {
         try {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            var imgFileName = "IMAGE$timeStamp.png"
+            var imgFileName = "IMAGE$timeStamp.jpg"
             curFile?.let {
                 imageRef.child("images").child(imgFileName).putFile(it).await()
                 withContext(Dispatchers.Main) {

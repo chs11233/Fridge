@@ -4,17 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.holifridge.fridge2.FoodInfo
+import com.holifridge.fridge2.R
 import com.holifridge.fridge2.databinding.ActivityJangBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
+import kotlinx.coroutines.currentCoroutineContext
 
 
 class JangActivity : AppCompatActivity() {
@@ -36,6 +42,7 @@ class JangActivity : AppCompatActivity() {
         binding.rvJang.layoutManager = LinearLayoutManager(this)
         binding.rvJang.adapter = RecyclerViewAdapter(foods)
     }
+
 
     inner class RecyclerViewAdapter(val binding: MutableList<String>) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -68,11 +75,10 @@ class JangActivity : AppCompatActivity() {
             var viewHolder = (holder as CustomViewHolder).binding
 
             val firebaseStorage = FirebaseStorage.getInstance()
-            val storageReference = firebaseStorage.reference.child("images")
+            val storageReference = firebaseStorage.reference.child("images").child("IMAGE" + foods[position].url + ".jpg")
             storageReference.downloadUrl.addOnCompleteListener {
-                Glide.with(this@JangActivity).load("IMAGE" + foods[position].url + ".png").into(viewHolder.photoImg)
+                Glide.with(holder.itemView.context).load(storageReference).into(viewHolder.photoImg)
             }
-
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
