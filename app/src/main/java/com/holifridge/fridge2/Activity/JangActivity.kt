@@ -4,28 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.holifridge.fridge2.FoodInfo
 import com.holifridge.fridge2.R
 import com.holifridge.fridge2.databinding.ActivityJangBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
-import kotlinx.coroutines.currentCoroutineContext
 
 
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
     private val binding get() = mBinding!!
+
+//    lateinit var photoList:ArrayList<FoodInfo>
 
     var firestore: FirebaseFirestore? = null
     var firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -41,6 +38,8 @@ class JangActivity : AppCompatActivity() {
 
         binding.rvJang.layoutManager = LinearLayoutManager(this)
         binding.rvJang.adapter = RecyclerViewAdapter(foods)
+
+//        photoList= ArrayList()
     }
 
 
@@ -53,11 +52,19 @@ class JangActivity : AppCompatActivity() {
                 ?.whereEqualTo("loc", 1)
                 ?.addSnapshotListener { querySnapshot, _ ->
                     foods.clear()
-                    for (snapshot in querySnapshot!!.documents) {
-                        var item = snapshot.toObject(FoodInfo::class.java)
-                        foods.add(item!!)
-
-                    }
+//                    if (querySnapshot!= null) {
+//                        for(dc in querySnapshot.documentChanges){
+//                            if (dc.type== DocumentChange.Type.ADDED){
+//                                var photo = dc.document.toObject(FoodInfo::class.java)
+//                                photo.url=dc.document.id
+//                                photoList.add(photo)
+//                            }
+//                        }
+                        for (snapshot in querySnapshot!!.documents) {
+                            var item = snapshot.toObject(FoodInfo::class.java)
+                            foods.add(item!!)
+                        }
+//                    }
                     notifyDataSetChanged()
                 }
         }
@@ -75,15 +82,14 @@ class JangActivity : AppCompatActivity() {
             var viewHolder = (holder as CustomViewHolder).binding
 
             val firebaseStorage = FirebaseStorage.getInstance()
-            val storageReference = firebaseStorage.reference.child("images").child("IMAGE" + foods[position].url + ".jpg")
-            storageReference.downloadUrl.addOnCompleteListener {
-                Glide.with(holder.itemView.context).load(storageReference).into(viewHolder.photoImg)
-            }
+            val storageReference = firebaseStorage.reference.child("images")
+//            storageReference.downloadUrl.addOnCompleteListener {
+                Glide.with(this@JangActivity).load(storageReference)
+                    .into(viewHolder.photoImg)
+//            }
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
-
-
         }
 
         override fun getItemCount(): Int {
@@ -102,4 +108,5 @@ class JangActivity : AppCompatActivity() {
         super.onRestart()
         reFresh()
     }
+
 }

@@ -127,7 +127,7 @@ class AddActivity : AppCompatActivity() {
             var food = FoodInfo(name, date, date_long, loc, false, url)
 
             saveFood(food)
-            uploadImageToStorage()
+            saveImage()
 
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -154,7 +154,7 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImageToStorage() = CoroutineScope(Dispatchers.IO).launch {
+    private fun saveImage() = CoroutineScope(Dispatchers.IO).launch {
         try {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             var imgFileName = "IMAGE$timeStamp.jpg"
