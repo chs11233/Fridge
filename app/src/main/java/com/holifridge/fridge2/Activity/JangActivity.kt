@@ -1,10 +1,15 @@
 package com.holifridge.fridge2.Activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -13,8 +18,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.holifridge.fridge2.FoodInfo
 import com.holifridge.fridge2.GlideApp
 import com.holifridge.fridge2.R
+import com.holifridge.fridge2.SwipeHelperCallback
 import com.holifridge.fridge2.databinding.ActivityJangBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
@@ -23,6 +31,7 @@ class JangActivity : AppCompatActivity() {
     var firestore: FirebaseFirestore? = null
     var firebaseUser = FirebaseAuth.getInstance().currentUser
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityJangBinding.inflate(layoutInflater)
@@ -33,7 +42,19 @@ class JangActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
 
         binding.rvJang.layoutManager = LinearLayoutManager(this)
-        binding.rvJang.adapter = RecyclerViewAdapter(foods)
+        val recyclerViewAdapter = RecyclerViewAdapter(foods)
+        binding.rvJang.adapter = recyclerViewAdapter
+
+        val swipeHelperCallback = SwipeHelperCallback(recyclerViewAdapter).apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
+        }
+        ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(binding.rvJang)
+
+        binding.rvJang.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
+        binding.rvJang.setOnTouchListener { _, _ ->
+            swipeHelperCallback.removePreviousClamp(binding.rvJang)
+            false
+        }
     }
 
     inner class RecyclerViewAdapter(val binding: MutableList<String>) :
@@ -60,7 +81,8 @@ class JangActivity : AppCompatActivity() {
         }
 
         inner class CustomViewHolder(val binding: ItemFoodBinding) :
-            RecyclerView.ViewHolder(binding.root)
+            RecyclerView.ViewHolder(binding.root){
+        }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
@@ -75,11 +97,33 @@ class JangActivity : AppCompatActivity() {
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
+
+            viewHolder.tvRemove.setOnClickListener {
+                removeData(position)
+                Toast.makeText(this@JangActivity, "삭제했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         override fun getItemCount(): Int {
             return foods.size
         }
+
+        // -----------------데이터 조작함수 추가-----------------
+
+        // position 위치의 데이터를 삭제 후 어댑터 갱신
+        fun removeData(position: Int) {
+            foods.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemCount - position)
+        }
+
+        // 현재 선택된 데이터와 드래그한 위치에 있는 데이터를 교환
+        fun swapData(fromPos: Int, toPos: Int) {
+            Collections.swap(foods, fromPos, toPos)
+            notifyItemMoved(fromPos, toPos)
+        }
+
     }
 
     private fun reFresh() {
@@ -93,4 +137,5 @@ class JangActivity : AppCompatActivity() {
         super.onRestart()
         reFresh()
     }
+
 }
