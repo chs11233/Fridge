@@ -7,22 +7,18 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.holifridge.fridge2.FoodInfo
+import com.holifridge.fridge2.GlideApp
 import com.holifridge.fridge2.R
 import com.holifridge.fridge2.databinding.ActivityJangBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
 
-
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
     private val binding get() = mBinding!!
-
-//    lateinit var photoList:ArrayList<FoodInfo>
 
     var firestore: FirebaseFirestore? = null
     var firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -38,10 +34,7 @@ class JangActivity : AppCompatActivity() {
 
         binding.rvJang.layoutManager = LinearLayoutManager(this)
         binding.rvJang.adapter = RecyclerViewAdapter(foods)
-
-//        photoList= ArrayList()
     }
-
 
     inner class RecyclerViewAdapter(val binding: MutableList<String>) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -52,19 +45,10 @@ class JangActivity : AppCompatActivity() {
                 ?.whereEqualTo("loc", 1)
                 ?.addSnapshotListener { querySnapshot, _ ->
                     foods.clear()
-//                    if (querySnapshot!= null) {
-//                        for(dc in querySnapshot.documentChanges){
-//                            if (dc.type== DocumentChange.Type.ADDED){
-//                                var photo = dc.document.toObject(FoodInfo::class.java)
-//                                photo.url=dc.document.id
-//                                photoList.add(photo)
-//                            }
-//                        }
-                        for (snapshot in querySnapshot!!.documents) {
-                            var item = snapshot.toObject(FoodInfo::class.java)
-                            foods.add(item!!)
-                        }
-//                    }
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(FoodInfo::class.java)
+                        foods.add(item!!)
+                    }
                     notifyDataSetChanged()
                 }
         }
@@ -82,11 +66,12 @@ class JangActivity : AppCompatActivity() {
             var viewHolder = (holder as CustomViewHolder).binding
 
             val firebaseStorage = FirebaseStorage.getInstance()
-            val storageReference = firebaseStorage.reference.child("images")
-//            storageReference.downloadUrl.addOnCompleteListener {
-                Glide.with(this@JangActivity).load(storageReference)
+            val storageReference = firebaseStorage.reference.child("images/" + foods[position].url)
+            storageReference.downloadUrl.addOnCompleteListener {
+                GlideApp.with(this@JangActivity).load(storageReference)
+                    .placeholder(R.drawable.icon_kitchen)
                     .into(viewHolder.photoImg)
-//            }
+            }
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
@@ -108,5 +93,4 @@ class JangActivity : AppCompatActivity() {
         super.onRestart()
         reFresh()
     }
-
 }

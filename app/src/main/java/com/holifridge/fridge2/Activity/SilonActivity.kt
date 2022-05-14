@@ -12,6 +12,9 @@ import com.holifridge.fridge2.databinding.ActivitySilonBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.holifridge.fridge2.GlideApp
+import com.holifridge.fridge2.R
 
 class SilonActivity : AppCompatActivity() {
     private var mBinding: ActivitySilonBinding? = null
@@ -62,6 +65,13 @@ class SilonActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
 
+            val firebaseStorage = FirebaseStorage.getInstance()
+            val storageReference = firebaseStorage.reference.child("images/" + foods[position].url)
+            storageReference.downloadUrl.addOnCompleteListener {
+                GlideApp.with(this@SilonActivity).load(storageReference)
+                    .placeholder(R.drawable.icon_kitchen)
+                    .into(viewHolder.photoImg)
+            }
             viewHolder.foodname.text = foods[position].name
             viewHolder.foodDday.text = foods[position].date_long.toString()
             viewHolder.foodDate.text = foods[position].date
