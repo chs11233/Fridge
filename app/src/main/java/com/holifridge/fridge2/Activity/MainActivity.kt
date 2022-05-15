@@ -80,6 +80,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        googleSignInClient!!.signOut()
     }
 
     //NavigationView
@@ -97,13 +99,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.logout -> {
                 var logoutIntent = Intent(this, LoginActivity::class.java)
-                logoutIntent.flags =
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(logoutIntent)
-
                 auth?.signOut()
                 FirebaseAuth.getInstance().signOut()
                 googleSignInClient?.signOut()
+                logoutIntent.flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(logoutIntent)
             }
         }
         return false

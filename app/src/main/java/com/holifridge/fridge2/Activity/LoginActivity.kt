@@ -46,15 +46,6 @@ class LoginActivity : AppCompatActivity() {
             signIn()
         }
 
-        binding.login.setOnClickListener {
-            login(binding.loginEmail.text.toString(), binding.loginPassword.text.toString())
-        }
-        binding.gotoForgotPassword.setOnClickListener {
-            startActivity(Intent(this, PasswordActivity::class.java))
-        }
-        binding.gotoSignUp.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-        }
     }
 
     private fun signIn() {
@@ -97,28 +88,10 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    // 로그아웃하지 않을 시 자동 로그인 , 회원가입시 바로 로그인 됨
+    // 로그아웃하지 않을 시 자동 로그인
     override fun onStart() {
         super.onStart()
         moveMainPage(auth?.currentUser)
-    }
-
-    // 로그인
-    private fun login(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.signInWithEmailAndPassword(email, password)?.addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(baseContext, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
-                    moveMainPage(auth?.currentUser)
-                } else {
-                    if (task.exception != null)
-                        Toast.makeText(baseContext, task.exception.toString(), Toast.LENGTH_SHORT)
-                            .show()
-                }
-            }
-        } else {
-            Toast.makeText(baseContext, "이메일 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
-        }
     }
 
     // 유저정보 넘겨주고 메인 액티비티 호출

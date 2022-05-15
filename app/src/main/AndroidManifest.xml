@@ -14,21 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.holifridge.fridge2.Activity.AddActivity"/>
-        <activity android:name="com.holifridge.fridge2.Activity.CameraActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.SilonActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.DongActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.JangActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.MainActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.PasswordActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.SignUpActivity" />
-        <activity android:name="com.holifridge.fridge2.Activity.LoginActivity">
+        <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.AddActivity" />
+        <activity android:name=".Activity.SilonActivity" />
+        <activity android:name=".Activity.DongActivity" />
+        <activity android:name=".Activity.JangActivity" />
+        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.LoginActivity" />
     </application>
 
 </manifest>

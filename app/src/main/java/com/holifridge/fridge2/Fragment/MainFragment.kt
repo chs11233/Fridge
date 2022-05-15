@@ -57,13 +57,6 @@ class MainFragment : Fragment() {
             toggleFab()
         }
 
-        binding.fabCamera.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, CameraActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
         binding.fabAdd.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, AddActivity::class.java)
@@ -74,11 +67,9 @@ class MainFragment : Fragment() {
 
     private fun toggleFab() {
         if (isFabOpen) {
-            ObjectAnimator.ofFloat(binding.fabCamera, "translationY", 0f).apply { start() }
             ObjectAnimator.ofFloat(binding.fabAdd, "translationY", 0f).apply { start() }
             ObjectAnimator.ofFloat(binding.fabMain, View.ROTATION, 45f, 0f).apply { start() }
         } else { // 플로팅 액션 버튼 열기 - 닫혀있는 플로팅 버튼 꺼내는 애니메이션
-            ObjectAnimator.ofFloat(binding.fabCamera, "translationY", -360f).apply { start() }
             ObjectAnimator.ofFloat(binding.fabAdd, "translationY", -180f).apply { start() }
             ObjectAnimator.ofFloat(binding.fabMain, View.ROTATION, 0f, 45f).apply { start() }
         }

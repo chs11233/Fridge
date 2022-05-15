@@ -2,6 +2,7 @@ package com.holifridge.fridge2.Activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.util.Util.getSnapshot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -94,6 +94,25 @@ class JangActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
 
+            var dday = ( getIgnoredTimeDays(foods[position].date_long!!.toLong()) - getIgnoredTimeDays(System.currentTimeMillis()) ) / (24 * 60 * 60 * 1000)
+            if (dday == 0L) {
+                viewHolder.foodDday.setTextSize(20.toFloat())
+                viewHolder.foodDday.setTextColor(Color.parseColor("#FF2727")) // 더 빨간색(백업 #FF0000)
+            } else if (dday > 0L) {
+                viewHolder.foodDday.text = "${dday}"
+                if (dday <= 3L) {
+                    viewHolder.foodDday.setTextColor(Color.parseColor("#FF2727")) // 빨간색(백업 #E84646)
+                } else if (dday <= 7L) {
+                    viewHolder.foodDday.setTextColor(Color.parseColor("#FF8B00")) // 노란색(약간 겨자색)  (백업 #D8B713)
+                } else {
+                    viewHolder.foodDday.setTextColor(Color.parseColor("#1BB222")) // 연두색(백업 #7CB639)
+                }
+            } else {
+                viewHolder.foodDday.text = "D + ${( getIgnoredTimeDays(System.currentTimeMillis()) - getIgnoredTimeDays(foods[position].date_long!!.toLong()) ) / (24 * 60 * 60 * 1000)}" // 날짜가 지날땐 다시계산
+                viewHolder.foodDday.setTextColor(Color.parseColor("#000000")) // 검은색
+            }
+
+
             val firebaseStorage = FirebaseStorage.getInstance()
             val storageReference = firebaseStorage.reference.child("images/" + foods[position].url)
             storageReference.downloadUrl.addOnCompleteListener {
@@ -109,6 +128,17 @@ class JangActivity : AppCompatActivity() {
                 removeData(position)
                 Toast.makeText(this@JangActivity, "삭제했습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        fun getIgnoredTimeDays(time: Long): Long {
+            return Calendar.getInstance().apply {
+                timeInMillis = time
+
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.timeInMillis
         }
 
         override fun getItemCount(): Int {
