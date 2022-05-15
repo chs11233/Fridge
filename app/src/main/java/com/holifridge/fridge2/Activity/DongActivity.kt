@@ -16,7 +16,9 @@ import com.holifridge.fridge2.databinding.ActivityDongBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.holifridge.fridge2.GlideApp
 import com.holifridge.fridge2.R
 import com.holifridge.fridge2.SwiperHelper.DSwipeHelperCallback
@@ -113,6 +115,11 @@ class DongActivity : AppCompatActivity() {
 
         // position 위치의 데이터를 삭제 후 어댑터 갱신
         fun removeData(position: Int) {
+            val storage = Firebase.storage
+            val storageX = storage.reference
+            storageX.child("images/" + foods[position].url).delete()
+            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")?.document(foods[position].url.toString())
+                ?.delete()
             foods.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, itemCount - position)

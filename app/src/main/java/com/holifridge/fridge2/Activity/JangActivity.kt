@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.util.Util.getSnapshot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.holifridge.fridge2.FoodInfo
 import com.holifridge.fridge2.GlideApp
 import com.holifridge.fridge2.R
@@ -87,8 +89,7 @@ class JangActivity : AppCompatActivity() {
         }
 
         inner class CustomViewHolder(val binding: ItemFoodBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-        }
+            RecyclerView.ViewHolder(binding.root)
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
@@ -116,12 +117,14 @@ class JangActivity : AppCompatActivity() {
 
         // position 위치의 데이터를 삭제 후 어댑터 갱신
         fun removeData(position: Int) {
+            val storage = Firebase.storage
+            val storageX = storage.reference
+            storageX.child("images/" + foods[position].url).delete()
+            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")?.document(foods[position].url.toString())
+                ?.delete()
             foods.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, itemCount - position)
-            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")?.document(
-                foods[position].toString()
-            )?.delete()
         }
 
         // 현재 선택된 데이터와 드래그한 위치에 있는 데이터를 교환

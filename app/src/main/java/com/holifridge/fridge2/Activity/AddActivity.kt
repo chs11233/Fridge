@@ -142,7 +142,7 @@ class AddActivity : AppCompatActivity() {
             var foodCollectionRef = FirebaseFirestore.getInstance()
             if (firebaseUser != null) {
                 foodCollectionRef.collection("user").document(firebaseUser.uid).collection("foods")
-                    .add(food).await()
+                    .document(food.url.toString()).set(food).await()
             } // await는 데이터가 성공적으로 업로드가 될 때 까지 기다려주는 메서드
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@AddActivity, "저장되었습니다.", Toast.LENGTH_LONG).show()
