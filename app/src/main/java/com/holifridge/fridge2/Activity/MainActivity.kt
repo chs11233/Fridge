@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.navi_menu) // 홈버튼 이미지 변경
         supportActionBar?.setDisplayShowTitleEnabled(true) // 툴바에 타이틀 보이게
-        supportActionBar?.title = "냉 무"
 
         //NavigationDrawer 생성
         drawerLayout = binding.drawerLayout
@@ -73,15 +72,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             selectedItemId = R.id.main
         }
-
-        // 로그아웃
-        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        googleSignInClient!!.signOut()
     }
 
     //NavigationView
@@ -98,10 +88,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-                var logoutIntent = Intent(this, LoginActivity::class.java)
-                auth?.signOut()
+                // 로그아웃
+                var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
+                googleSignInClient = GoogleSignIn.getClient(this, gso)
+
                 FirebaseAuth.getInstance().signOut()
-                googleSignInClient?.signOut()
+                googleSignInClient?.signOut()?.addOnCompleteListener {
+                    this.finish()
+                }
+
+                var logoutIntent = Intent(this, LoginActivity::class.java)
                 logoutIntent.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(logoutIntent)
