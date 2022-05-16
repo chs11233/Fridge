@@ -93,29 +93,35 @@
                     android:textSize="24sp"
                     android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/foodDday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:scaleType="centerInside"
-                    android:text="DAY"
-                    android:textSize="24sp"
-                    android:textColor="@color/green"
-                    app:layout_constraintStart_toStartOf="@id/layname" />
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toEndOf="@id/photoImg"
+                    app:layout_constraintTop_toTopOf="@id/photoImg">
+
+                    <TextView
+                        android:id="@+id/foodDday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerInside"
+                        android:text="DAY"
+                        android:textSize="24sp"
+                        android:textColor="@color/green"
+                        app:layout_constraintStart_toStartOf="@id/layname" />
+
+                    <TextView
+                        android:id="@+id/foodDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2020.12.31"
+                        android:textSize="9sp"
+                        app:layout_constraintBottom_toBottomOf="@id/layname"
+                        app:layout_constraintStart_toStartOf="@id/layname" />
+                </LinearLayout>
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/foodDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="60dp"
-                android:gravity="center"
-                android:text="2020.12.31"
-                android:textSize="9sp"
-                app:layout_constraintBottom_toBottomOf="@id/layname"
-                app:layout_constraintStart_toStartOf="@id/layname" />
 
         </LinearLayout>
     </LinearLayout>
