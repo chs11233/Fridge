@@ -29,15 +29,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.nj.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, JangActivity::class.java)
-                startActivity(intent)
-            }
-        }
         binding.nd.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, DongActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        binding.nj.setOnClickListener {
+            activity?.let {
+                val intent = Intent(context, JangActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -47,7 +47,6 @@ class MainFragment : Fragment() {
                 startActivity(intent)
             }
         }
-
         setFABClickEvent()
     }
 

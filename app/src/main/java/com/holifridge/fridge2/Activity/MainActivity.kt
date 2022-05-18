@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.navi_menu) // 홈버튼 이미지 변경
         supportActionBar?.setDisplayShowTitleEnabled(true) // 툴바에 타이틀 보이게
+        supportActionBar?.title = "냉장고"
+        supportActionBar?.setBackgroundDrawable(resources.getDrawable(R.color.blue))
 
         //NavigationDrawer 생성
         drawerLayout = binding.drawerLayout
@@ -73,7 +75,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             selectedItemId = R.id.main
         }
     }
-
     //NavigationView
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
@@ -108,7 +109,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         return false
     }
-
 
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
