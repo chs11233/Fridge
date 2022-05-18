@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -24,9 +23,9 @@ import com.holifridge.fridge2.R
 import com.holifridge.fridge2.SwiperHelper.JSwipeHelperCallback
 import com.holifridge.fridge2.databinding.ActivityJangBinding
 import com.holifridge.fridge2.databinding.ItemFoodBinding
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.concurrent.timer
 
 class JangActivity : AppCompatActivity() {
     private var mBinding: ActivityJangBinding? = null
@@ -34,8 +33,7 @@ class JangActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
     var firebaseUser = FirebaseAuth.getInstance().currentUser
-
-    var oSysMainLoop = 0
+    val ONE_DAY = (24 * 60 * 60 * 1000)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,38 +96,7 @@ class JangActivity : AppCompatActivity() {
             var viewHolder = (holder as CustomViewHolder).binding
 
             dateColor(holder, position)
-
-            val highNoon = Calendar.getInstance()
-            highNoon.set(Calendar.HOUR_OF_DAY, 12)
-            highNoon.set(Calendar.MINUTE, 0)
-            highNoon.set(Calendar.SECOND, 0)
-
-            val timer = Timer()
-            var date_long = foods[position].date_long!!
-            timer.schedule(object: TimerTask() {
-                override fun run() {
-                    firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")
-                        ?.document(foods[position].url.toString())?.update("date_long", --date_long)
-                        ?.addOnSuccessListener {
-                        }?.addOnFailureListener() {
-                        }
-                }
-            }, highNoon.time)
-
-
-
-//            oSysMainLoop = 1
-//            timer(period = 10000, initialDelay = 1000) {
-//                if (oSysMainLoop != 1) {
-//                    cancel()
-//                }
-//                var date_long = foods[position].date_long!!
-//                firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")
-//                    ?.document(foods[position].url.toString())?.update("date_long", --date_long)
-//                    ?.addOnSuccessListener {
-//                    }?.addOnFailureListener() {
-//                    }
-//            }
+            dDay(holder, position)
 
             val firebaseStorage = FirebaseStorage.getInstance()
             val storageReference = firebaseStorage.reference.child("images/" + foods[position].url)
@@ -147,6 +114,7 @@ class JangActivity : AppCompatActivity() {
                 Toast.makeText(this@JangActivity, "삭제했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+
         fun dateColor(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
             var dday = foods[position].date_long!!.toLong()
@@ -163,6 +131,24 @@ class JangActivity : AppCompatActivity() {
             } else {
                 viewHolder.foodDday.setTextColor(Color.parseColor("#000000")) // 검은색
             }
+        }
+
+        fun dDay(holder: RecyclerView.ViewHolder, position: Int) {
+            var calendar = Calendar.getInstance()
+            val df = SimpleDateFormat("yyyy.MM.dd")
+            calendar.time = df.parse(foods[position].date)
+            val today = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.time.time
+            var date_long = (calendar.time.time - today) / ONE_DAY
+            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")
+                ?.document(foods[position].url.toString())?.update("date_long", date_long)
+                ?.addOnSuccessListener {
+                }?.addOnFailureListener {
+                }
         }
 
         override fun getItemCount(): Int {
@@ -189,7 +175,6 @@ class JangActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onRestart() {
         super.onRestart()
         reFresh()
@@ -201,5 +186,4 @@ class JangActivity : AppCompatActivity() {
         finish()
         startActivity(refreshIntent)
     }
-
 }

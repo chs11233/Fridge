@@ -2,6 +2,7 @@ package com.holifridge.fridge2.Activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.google.firebase.storage.ktx.storage
 import com.holifridge.fridge2.GlideApp
 import com.holifridge.fridge2.R
 import com.holifridge.fridge2.SwiperHelper.SSwipeHelperCallback
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,6 +33,7 @@ class SilonActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
     var firebaseUser = FirebaseAuth.getInstance().currentUser
+    val ONE_DAY = (24 * 60 * 60 * 1000)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +95,9 @@ class SilonActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as CustomViewHolder).binding
 
+            dateColor(holder, position)
+            dDay(holder, position)
+
             val firebaseStorage = FirebaseStorage.getInstance()
             val storageReference = firebaseStorage.reference.child("images/" + foods[position].url)
             storageReference.downloadUrl.addOnCompleteListener {
@@ -109,6 +115,42 @@ class SilonActivity : AppCompatActivity() {
             }
         }
 
+        fun dateColor(holder: RecyclerView.ViewHolder, position: Int) {
+            var viewHolder = (holder as SilonActivity.RecyclerViewAdapter.CustomViewHolder).binding
+            var dday = foods[position].date_long!!.toLong()
+            if (dday == 0L) {
+                viewHolder.foodDday.setTextColor(Color.parseColor("#FF2727")) // 더 빨간색(백업 #FF0000)
+            } else if (dday > 0L) {
+                if (dday <= 3L) {
+                    viewHolder.foodDday.setTextColor(Color.parseColor("#FF2727")) // 빨간색(백업 #E84646)
+                } else if (dday <= 7L) {
+                    viewHolder.foodDday.setTextColor(Color.parseColor("#FF8B00")) // 노란색(약간 겨자색)  (백업 #D8B713)
+                } else {
+                    viewHolder.foodDday.setTextColor(Color.parseColor("#1BB222")) // 연두색(백업 #7CB639)
+                }
+            } else {
+                viewHolder.foodDday.setTextColor(Color.parseColor("#000000")) // 검은색
+            }
+        }
+
+        fun dDay(holder: RecyclerView.ViewHolder, position: Int) {
+            var calendar = Calendar.getInstance()
+            val df = SimpleDateFormat("yyyy.MM.dd")
+            calendar.time = df.parse(foods[position].date)
+            val today = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.time.time
+            var date_long = (calendar.time.time - today) / ONE_DAY
+            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")
+                ?.document(foods[position].url.toString())?.update("date_long", date_long)
+                ?.addOnSuccessListener {
+                }?.addOnFailureListener {
+                }
+        }
+
         override fun getItemCount(): Int {
             return foods.size
         }
@@ -118,7 +160,8 @@ class SilonActivity : AppCompatActivity() {
             val storage = Firebase.storage
             val storageX = storage.reference
             storageX.child("images/" + foods[position].url).delete()
-            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")?.document(foods[position].url.toString())
+            firestore?.collection("user")?.document(firebaseUser!!.uid)?.collection("foods")
+                ?.document(foods[position].url.toString())
                 ?.delete()
             foods.removeAt(position)
             notifyItemRemoved(position)
