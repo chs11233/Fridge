@@ -1,3 +1,14 @@
+1. D-DAY
+* Activity 들어갈때마다 현재시간과 date_long을 비교해 디데이 설정
+* 날짜에 따라 색상 변경
+2. 사진
+* GlideApp 사용
+* Coroutine 사용
+3. Firebase
+* Firestore 적절한 사용
+* Firestorage 적절한 사용
+* Google login 사용
+------------
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80237305/169140654-ddaef911-4f08-4fbc-a644-a4366fe60124.png" width="40%" height="40%"/>
     <img src="https://user-images.githubusercontent.com/80237305/169140656-dfed5e89-bf12-4817-b218-8e5f8bdb6c02.png" width="40%" height="40%"/>
