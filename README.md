@@ -1,3 +1,4 @@
+https://play.google.com/store/apps/details?id=com.holifridge.fridge2
 1. D-DAY
 * Activity 들어갈때마다 현재시간과 date_long을 비교해 디데이 설정
 * 날짜에 따라 색상 변경
